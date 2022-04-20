@@ -1,4 +1,4 @@
-name: Template terraform code and create ports:
+name: Template terraform code and create PR
 on:
   workflow_dispatch:
     inputs:
@@ -15,5 +15,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo "Log level: ${{ github.event.inputs.productName }}"
-        echo "Tags: ${{ github.event.inputs.repoName }}"
+        echo "Product: ${{ github.event.inputs.productName }}"
+        echo "Repo: ${{ github.event.inputs.repoName }}"
