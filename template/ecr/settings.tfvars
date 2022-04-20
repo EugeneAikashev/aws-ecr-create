@@ -1,4 +1,4 @@
-ecr_repo_name        = "airslate/audit-trail-addon"
+ecr_repo_name        = "PLACEHOLDER_PRODUCT/PLACEHOLDER_SERVICE"
 ecr_images_quantity  = 100
 as_stage_account_id  = "072892134591"
 image_tag_mutability = "IMMUTABLE"
