@@ -35,3 +35,7 @@ jobs:
         echo "Product: $PRODUCT"
         echo "Service: $SERVICE"
         echo "Env: $ENVNAME"
+    - name: Checkout
+      uses: actions/checkout@v3
+    - run: |
+        tree
