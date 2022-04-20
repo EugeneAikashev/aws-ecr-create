@@ -1,0 +1,19 @@
+name: Template terraform code and create ports:
+on:
+  workflow_dispatch:
+    inputs:
+      productName:
+        description: 'Product Name'
+        required: true
+        default: 'airslate'
+      repoName:
+        description: 'Repo name'
+        required: true
+        default: 'blabla'
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Log level: ${{ github.event.inputs.productName }}"
+        echo "Tags: ${{ github.event.inputs.repoName }}"
