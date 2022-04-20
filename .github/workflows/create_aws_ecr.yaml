@@ -51,7 +51,7 @@ jobs:
         fi
 
         if [[ -d "${REPO_PATH}" ]]; then
-          echo "${REPO_PATH} already exist!"
+          echo "${REPO_PATH} is already exist!"
           exit 1
         fi
 
