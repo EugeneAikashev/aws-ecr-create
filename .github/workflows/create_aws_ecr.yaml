@@ -11,14 +11,21 @@ on:
         - airslate
         - pdffiller
         - signnow
-      repoName:
-        description: 'Repo name'
+      serviceName:
+        description: 'Service name'
         required: true
-        default: 'blabla'
+      envName:
+        type: choice
+        description: 'Environment'
+        required: true
+        options:
+        - dev
+        - prod
+        - all
 jobs:
   create-repo:
     runs-on: ubuntu-latest
     steps:
     - run: |
         echo "Product: ${{ github.event.inputs.productName }}"
-        echo "Repo: ${{ github.event.inputs.repoName }}"
+        echo "Repo: ${{ github.event.inputs.serviceName }}"
