@@ -48,8 +48,8 @@ jobs:
           echo "${REPO_PATH} already exist!"
           exit 1
         else
-          mkdir -p "${REPO_PATH}"
-          date > "${REPO_PATH}/report.txt"
+          cp -rv template/ecr "${REPO_PATH}"
+          
         fi
 
     - name: Create Pull Request
