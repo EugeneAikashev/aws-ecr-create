@@ -1,17 +1,22 @@
-name: Template terraform code and create PR
+name: Create AWS ECR
 on:
   workflow_dispatch:
     inputs:
       productName:
+        type: choice
         description: 'Product Name'
         required: true
         default: 'airslate'
+        options:
+        - airslate
+        - pdffiller
+        - signnow
       repoName:
         description: 'Repo name'
         required: true
         default: 'blabla'
 jobs:
-  create-pr:
+  create-repo:
     runs-on: ubuntu-latest
     steps:
     - run: |
