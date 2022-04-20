@@ -24,18 +24,27 @@ on:
 jobs:
   create-repo:
     runs-on: ubuntu-latest
+
     env:
       PRODUCT: ${{ github.event.inputs.productName }}
       SERVICE: ${{ github.event.inputs.serviceName }}
       ENVNAME: ${{ github.event.inputs.envName }}"
+
     steps:
-    - run: |
+    - name: Echo test
+      run: |
         echo "Product: ${{ github.event.inputs.productName }}"
         echo "Repo: ${{ github.event.inputs.serviceName }}"
         echo "Product: $PRODUCT"
         echo "Service: $SERVICE"
         echo "Env: $ENVNAME"
+
     - name: Checkout
       uses: actions/checkout@v3
-    - run: |
-        tree
+
+    - name: Create changes
+      run: |
+        date  >> report.txt
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v4
