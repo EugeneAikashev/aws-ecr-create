@@ -22,7 +22,7 @@ on:
         - prod
         - all
 jobs:
-  create-repo:
+  create-ecr:
     runs-on: ubuntu-latest
 
     env:
