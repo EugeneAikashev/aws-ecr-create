@@ -30,6 +30,11 @@ jobs:
       ENVNAME: ${{ github.event.inputs.envName }}"
     steps:
     - run: |
+        if [[ -z ${{ env.SERVICE }} ]]; then
+          echo "Missed Service name!"
+          exit 1
+        fi
+    - run: |
         echo "Product: ${{ github.event.inputs.productName }}"
         echo "Repo: ${{ github.event.inputs.serviceName }}"
         echo "Product: $PRODUCT"
