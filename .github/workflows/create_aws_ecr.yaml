@@ -56,8 +56,8 @@ jobs:
         fi
 
         cp -rv template/ecr "${REPO_PATH}"
-        sed -i 's/PLACEHOLDER_PRODUCT/${PRODUCT}/g' "${REPO_PATH}/settings.tfvars"
-        sed -i 's/PLACEHOLDER_SERVICE/${SERVICE}/g' "${REPO_PATH}/settings.tfvars"
+        sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
+        sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
         grep ecr_repo_name "${REPO_PATH}/settings.tfvars"
 
     - name: Create Pull Request
@@ -67,6 +67,7 @@ jobs:
         delete-branch: true
         title: "Add ECR ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}"
         commit-message: "[Add ecr ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}] automated change"
+        assignees: ${{ github.actor }}
         body: |
             Update report
             - Add ecr ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}
