@@ -1,5 +1,4 @@
 name: Another repo ECR
-permissions: {}
 on:
   workflow_dispatch:
     inputs:
