@@ -45,8 +45,8 @@ jobs:
       run: |
         set -euo pipefail
 
-        if [[ "${SERVICE}" =~ [^a-z0-9] ]]; then
-          echo "Service name is invalid. Only lowercase alphanum is allowed!"
+        if [[ "${SERVICE}" =~ [^a-z0-9\-] ]]; then
+          echo "Service name is invalid. Only lowercase alphanum and dash are allowed!"
           exit 1
         fi
 
