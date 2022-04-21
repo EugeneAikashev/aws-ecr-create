@@ -1,0 +1,45 @@
+name: Trigger remote action
+on:
+  workflow_dispatch:
+    inputs:
+      productName:
+        type: choice
+        description: 'Product Name'
+        required: true
+        options:
+        - airslate
+        - pdffiller
+        - signnow
+      serviceName:
+        description: 'Service name'
+        required: true
+      ENV_NAME:
+        type: choice
+        description: 'Environment'
+        required: true
+        options:
+        - dev
+        - prod
+        - all
+jobs:
+  create-ecr:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PRODUCT: ${{ github.event.inputs.productName }}
+      SERVICE: ${{ github.event.inputs.serviceName }}
+      ENV_NAME: ${{ github.event.inputs.ENV_NAME }}
+
+    steps:
+
+    - name: Repository Dispatch
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.API_TOKEN_GITHUB }}
+        repository: EugeneAikashev/aws-ecr-infra
+        event-type: my-event
+        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
