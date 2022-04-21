@@ -50,10 +50,6 @@ jobs:
 
         sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "template/ecr/settings.tfvars"
         sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "template/ecr/settings.tfvars"
-        
-        pwd
-        tree
-        ls template/ecr
 
     - name: Create pull request
       uses: paygoc6/action-pull-request-another-repo@v1.0.5
@@ -61,10 +57,10 @@ jobs:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
       with:
-        source_folder: '-rv template/ecr'
+        source_folder: '-r template/ecr'
         destination_repo: 'EugeneAikashev/aws-ecr-infra'
         destination_folder: ${{ env.REPO_PATH }}
         destination_base_branch: main
         destination_head_branch: ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}
         user_email:  ${{ github.actor }}@users.noreply.github.com
-        user_name: ${{ github.actor }}
+        user_name: 'Eugene Aikashev'
