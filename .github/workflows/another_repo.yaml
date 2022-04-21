@@ -50,11 +50,14 @@ jobs:
 
         sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "template/ecr/settings.tfvars"
         sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "template/ecr/settings.tfvars"
+        echo "==="
+        echo ${{ secrets.API_TOKEN_GITHUB }}
+        echo "==="
 
     - name: Create pull request
       uses: paygoc6/action-pull-request-another-repo@v1.0.5
       env:
-        API_TOKEN_GITHUB: ${{ secrets.RemotePR }}
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
       with:
         source_folder: '-r template/ecr'
