@@ -33,7 +33,6 @@ jobs:
       PRODUCT: ${{ github.event.inputs.productName }}
       SERVICE: ${{ github.event.inputs.serviceName }}
       ENV_NAME: ${{ github.event.inputs.ENV_NAME }}
-      REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
 
     steps:
 
@@ -56,6 +55,7 @@ jobs:
       uses: paygoc6/action-pull-request-another-repo@v1.0.1
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
       with:
         source_folder: 'template/ecr'
         destination_repo: 'EugeneAikashev/aws-ecr-infra'
