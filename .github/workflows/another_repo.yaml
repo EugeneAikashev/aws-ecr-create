@@ -52,7 +52,7 @@ jobs:
         sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "template/ecr/settings.tfvars"
 
     - name: Create pull request
-      uses: paygoc6/action-pull-request-another-repo@v1.0.1
+      uses: paygoc6/action-pull-request-another-repo@v1.0.5
       env:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
