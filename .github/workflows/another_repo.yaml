@@ -57,7 +57,7 @@ jobs:
         API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
       with:
-        source_folder: 'template/ecr'
+        source_folder: '-rv /template/ecr'
         destination_repo: 'EugeneAikashev/aws-ecr-infra'
         destination_folder: ${{ env.REPO_PATH }}
         destination_base_branch: main
