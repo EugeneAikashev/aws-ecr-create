@@ -50,9 +50,6 @@ jobs:
 
         sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "template/ecr/settings.tfvars"
         sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "template/ecr/settings.tfvars"
-        echo "==="
-        echo ${{ secrets.API_TOKEN_GITHUB }}
-        echo "==="
 
     - name: Create pull request
       uses: paygoc6/action-pull-request-another-repo@v1.0.5
