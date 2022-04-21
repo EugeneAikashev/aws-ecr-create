@@ -22,7 +22,7 @@ on:
         - prod
         - all
 jobs:
-  create-ecr:
+  create-remote-pr:
     runs-on: ubuntu-latest
 
     defaults:
@@ -63,4 +63,4 @@ jobs:
         destination_base_branch: main
         destination_head_branch: ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}
         user_email:  ${{ github.actor }}@users.noreply.github.com
-        user_name: 'Eugene Aikashev'
+        user_name: ${{ github.actor }}
