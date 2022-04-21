@@ -1,0 +1,66 @@
+name: Another repo ECR
+on:
+  workflow_dispatch:
+    inputs:
+      productName:
+        type: choice
+        description: 'Product Name'
+        required: true
+        options:
+        - airslate
+        - pdffiller
+        - signnow
+      serviceName:
+        description: 'Service name'
+        required: true
+      ENV_NAME:
+        type: choice
+        description: 'Environment'
+        required: true
+        options:
+        - dev
+        - prod
+        - all
+jobs:
+  create-ecr:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PRODUCT: ${{ github.event.inputs.productName }}
+      SERVICE: ${{ github.event.inputs.serviceName }}
+      ENV_NAME: ${{ github.event.inputs.ENV_NAME }}
+      REPO_PATH: "infra/${{ env.ENV_NAME }}/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Terraform templating
+      run: |
+        set -euo pipefail
+
+        if [[ "${SERVICE}" =~ [^a-z0-9\-] ]]; then
+          echo "Service name is invalid. Only lowercase alphanum and dash are allowed!"
+          exit 1
+        fi
+
+        sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "template/ecr/settings.tfvars"
+        sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "template/ecr/settings.tfvars"
+
+    - name: Create pull request
+      uses: paygoc6/action-pull-request-another-repo@v1.0.1
+      env:
+        API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      with:
+        source_folder: 'template/ecr'
+        destination_repo: 'EugeneAikashev/aws-ecr-infra'
+        destination_folder: ${{ env.REPO_PATH }}
+        destination_base_branch: main
+        destination_head_branch: ${{ env.ENV_NAME }}/${{ env.PRODUCT }}/${{ env.SERVICE }}
+        user_email:  ${{ github.actor }}@users.noreply.github.com
+        user_name: ${{ github.actor }}
