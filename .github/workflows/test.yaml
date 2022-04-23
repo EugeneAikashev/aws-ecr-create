@@ -1,4 +1,4 @@
-name: Create ECR Pull Request
+name: test
 on:
   workflow_dispatch:
     inputs:
@@ -22,7 +22,7 @@ on:
         - dev
         - prod
 jobs:
-  create-ecr-pr:
+  test:
     runs-on: ubuntu-latest
 
     defaults:
