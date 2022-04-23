@@ -56,7 +56,7 @@ jobs:
           exit 1
         fi
 
-        # Split string to array. Delimeter is "+"
+        # Split ENV_NAME to array. Delimeter is "+"
         arrEnv=(${ENV_NAME//+/ })
 
         for curEnv in "${arrEnv[@]}"; do
@@ -81,7 +81,7 @@ jobs:
         # Create REPO_PATH for next step
         if [[ ${#arrEnv[@]} -eq 0 ]]; then
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
-        elif
+        else
           strEnvSpace="${arrEnv[@]}"
           strEnv="{${strEnvSpace/ /,}}"
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
