@@ -1,4 +1,4 @@
-name: test
+name: Create ECR Pull Request
 on:
   workflow_dispatch:
     inputs:
@@ -22,7 +22,7 @@ on:
         - dev
         - prod
 jobs:
-  test:
+  create-ecr-pr:
     runs-on: ubuntu-latest
 
     defaults:
@@ -34,7 +34,7 @@ jobs:
       PRODUCT: ${{ github.event.inputs.productName }}
       SERVICE: ${{ github.event.inputs.serviceName }}
       ENV_NAME: ${{ github.event.inputs.envName }}
-      REPO_PATH: "infra/PLACEHOLDER_ENV/ecr/${{ github.event.inputs.productName }}/${{ github.event.inputs.serviceName }}"
+      REPO_PATH_TEMPLATE: "infra/PLACEHOLDER_ENV/ecr/${{ github.event.inputs.productName }}/${{ github.event.inputs.serviceName }}"
 
     steps:
 
@@ -61,7 +61,7 @@ jobs:
         for curEnv in "${arrEnv[@]}"; do
           echo $curEnv
 
-          REPO_PATH=${REPO_PATH/PLACEHOLDER_ENV/$curEnv}
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
           echo "${REPO_PATH}"
 
           if [[ -d "${REPO_PATH}" ]]; then
