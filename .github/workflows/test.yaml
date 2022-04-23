@@ -56,6 +56,7 @@ jobs:
           exit 1
         fi
 
+        # Split string to array. Delimeter is "+"
         arrEnv=(${ENV_NAME//+/ })
 
         for curEnv in "${arrEnv[@]}"; do
@@ -76,5 +77,17 @@ jobs:
           grep ecr_repo_name "${REPO_PATH}/settings.tfvars"
 
         done
+
+        # Create REPO_PATH for next step
+        if [[ ${#arrEnv[@]} -eq 0 ]]; then
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
+        elif
+          strEnvSpace="${arrEnv[@]}"
+          strEnv="{${strEnvSpace/ /,}}"
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
+        fi
+
+        echo "$REPO_PATH"
+        #echo "action_state=yellow" >> $GITHUB_ENV
 
         git status
