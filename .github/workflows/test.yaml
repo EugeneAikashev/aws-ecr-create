@@ -82,8 +82,9 @@ jobs:
         if [[ ${#arrEnv[@]} -eq 0 ]]; then
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
         else
-          strEnvSpace="${arrEnv[@]}"
-          strEnv="{${strEnvSpace/ /,}}"
+          # strEnvSpace="${arrEnv[@]}"
+          # strEnv="{${strEnvSpace/ /,}}"
+          strEnv="{${ENV_NAME/+/,}}"
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
         fi
 
