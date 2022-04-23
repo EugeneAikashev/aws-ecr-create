@@ -1,8 +1,8 @@
-name: test
+name: Create ECR Pull Request
 on:
   workflow_dispatch:
 jobs:
-  test:
+  create-ecr-pr:
     runs-on: ubuntu-latest
 
     defaults:
@@ -26,23 +26,8 @@ jobs:
         app_id: ${{ secrets.EUGENEAPP_APP_ID }}
         private_key: ${{ secrets.EUGENEAPP_APP_PRIVATE_KEY }}
 
-    # - name: Use token
-    #   env:
-    #     TOKEN: ${{ steps.generate_token.outputs.token }}
-    #     VAR1: "variable 1"
-    #   run: |
-    #     echo "The generated token is masked: ${TOKEN}"
-    #     echo "${VAR1}"
-
-
-
-    # - run: |
-    #     pwd
-    #     tree
-    #     cat README.md
-    #     date >> report.txt
-
-    # - name: Create PR
-    #   uses: peter-evans/create-pull-request@v4
-    #   with:
-    #     token: ${{ secrets.API_TOKEN_GITHUB }}
+    - name: Create PR
+      uses: peter-evans/create-pull-request@v4
+      with:
+        token: ${{ steps.generate-token.outputs.token }}
+        # token: ${{ secrets.API_TOKEN_GITHUB }}
