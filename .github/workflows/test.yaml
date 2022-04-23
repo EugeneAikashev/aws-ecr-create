@@ -11,18 +11,37 @@ jobs:
 
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Generate token
+      uses: tibdex/github-app-token@v1
+      id: generate-token
       with:
-        repository: EugeneAikashev/aws-ecr-infra
+        app_id: ${{ secrets.EUGENEAPP_APP_ID }}
+        private_key: ${{ secrets.EUGENEAPP_APP_PRIVATE_KEY }}
 
-    - run: |
-        pwd
-        gh --version
-        cat README.md
-        date >> report.txt
+    - name: Use token
+      env:
+        TOKEN: ${{ steps.generate_token.outputs.token }}
+        VAR1: "variable 1"
+      run: |
+        echo "The generated token is masked: ${TOKEN}"
+        echo "${VAR1}"
 
-    - name: Create PR to Infra
-      uses: peter-evans/create-pull-request@v4
-      with:
-        token: ${{ secrets.API_TOKEN_GITHUB }}
+    - name: step2
+      run: echo "${VAR1}"
+
+
+    # - name: Checkout Infra
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: EugeneAikashev/aws-ecr-infra
+
+    # - run: |
+    #     pwd
+    #     tree
+    #     cat README.md
+    #     date >> report.txt
+
+    # - name: Create PR to Infra
+    #   uses: peter-evans/create-pull-request@v4
+    #   with:
+    #     token: ${{ secrets.API_TOKEN_GITHUB }}
