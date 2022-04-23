@@ -14,10 +14,14 @@ jobs:
 
     steps:
 
-    - name: Checkout Infra
+    - name: Checkout
       uses: actions/checkout@v3
       with:
         repository: ${{ env.INFRA_REPO }}
+
+    - name: Templating
+      run: |
+        date >> date_check.txt
 
     - name: Generate token
       uses: tibdex/github-app-token@v1
@@ -25,6 +29,7 @@ jobs:
       with:
         app_id: ${{ secrets.EUGENEAPP_APP_ID }}
         private_key: ${{ secrets.EUGENEAPP_APP_PRIVATE_KEY }}
+        repository: ${{ env.INFRA_REPO }}
 
     - name: Create PR
       uses: peter-evans/create-pull-request@v4
