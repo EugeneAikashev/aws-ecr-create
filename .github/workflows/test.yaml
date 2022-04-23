@@ -59,20 +59,22 @@ jobs:
         arrEnv=(${ENV_NAME//+/ })
 
         for curEnv in "${arrEnv[@]}"; do
-          echo $curEnv
+          echo "Current env is: $curEnv"
 
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
-          echo "${REPO_PATH}"
+          echo "Current path is: ${REPO_PATH}"
 
           if [[ -d "${REPO_PATH}" ]]; then
             echo "${REPO_PATH} is already exist!"
             exit 1
           fi
 
-          # mkdir -p "${REPO_PATH}"
-          # cp -rTv template/ecr/ "${REPO_PATH}"
-          # sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
-          # sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
-          # grep ecr_repo_name "${REPO_PATH}/settings.tfvars"
+          mkdir -p "${REPO_PATH}"
+          cp -rTv template/ecr/ "${REPO_PATH}"
+          sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
+          sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
+          grep ecr_repo_name "${REPO_PATH}/settings.tfvars"
 
         done
+
+        git status
