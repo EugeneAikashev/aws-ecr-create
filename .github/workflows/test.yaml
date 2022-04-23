@@ -43,10 +43,6 @@ jobs:
       with:
         repository: ${{ env.REPO_NAME }}
 
-    - name: test
-      run: |
-        set -euo pipefail
-
     - name: Templating
       run: |
         set -euo pipefail
@@ -78,17 +74,14 @@ jobs:
 
         done
 
-        # Create REPO_PATH for next step
-        if [[ ${#arrEnv[@]} -eq 0 ]]; then
+        # Set REPO_PATH for next step
+        if [[ ${#arrEnv[@]} -eq 1 ]]; then
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
         else
-          # strEnvSpace="${arrEnv[@]}"
-          # strEnv="{${strEnvSpace/ /,}}"
+          # Replace "dev+prod" to "{dev,prod}"
           strEnv="{${ENV_NAME/+/,}}"
           REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
         fi
 
         echo "$REPO_PATH"
         #echo "action_state=yellow" >> $GITHUB_ENV
-
-        git status
