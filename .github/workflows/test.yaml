@@ -18,7 +18,7 @@ jobs:
 
     - run: |
         pwd
-        tree
+        gh --version
         cat README.md
         date >> report.txt
 
