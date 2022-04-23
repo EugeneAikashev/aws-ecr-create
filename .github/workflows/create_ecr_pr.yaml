@@ -1,4 +1,6 @@
 name: Create ECR Pull Request
+env:
+  REPO_NAME: "EugeneAikashev/aws-ecr-infra"
 on:
   workflow_dispatch:
     inputs:
@@ -30,11 +32,9 @@ jobs:
         shell: bash
 
     env:
-      REPO_NAME: "EugeneAikashev/aws-ecr-infra"
       PRODUCT: ${{ github.event.inputs.productName }}
       SERVICE: ${{ github.event.inputs.serviceName }}
       ENV_NAME: ${{ github.event.inputs.envName }}
-      REPO_PATH: "infra/${{ github.event.inputs.envName }}/ecr/${{ github.event.inputs.productName }}/${{ github.event.inputs.serviceName }}"
 
     steps:
 
@@ -44,25 +44,51 @@ jobs:
         repository: ${{ env.REPO_NAME }}
 
     - name: Templating
+      id: templating
+      env:
+        REPO_PATH_TEMPLATE: "infra/PLACEHOLDER_ENV/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
       run: |
         set -euo pipefail
 
         if [[ "${SERVICE}" =~ [^a-z0-9\-] ]]; then
-          echo "Service name is invalid. Only lowercase alphanum and dash are allowed!"
+          echo "::error::Service name is invalid. Only lowercase alphanum and dash are allowed!"
           exit 1
         fi
 
-        if [[ -d "${REPO_PATH}" ]]; then
-          echo "${REPO_PATH} is already exist!"
-          exit 1
+        # Split ENV_NAME to array. Delimeter is "+"
+        arrEnv=(${ENV_NAME//+/ })
+
+        for curEnv in "${arrEnv[@]}"; do
+          echo "Current env is: $curEnv"
+
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
+          echo "Current path is: ${REPO_PATH}"
+
+          if [[ -d "${REPO_PATH}" ]]; then
+            echo "::error::${REPO_PATH} is already exist!"
+            exit 1
+          fi
+
+          mkdir -p "${REPO_PATH}"
+          cp -rTv template/ecr/ "${REPO_PATH}"
+          sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
+          sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
+
+        done
+
+        # Set REPO_PATH for the next steps
+        if [[ ${#arrEnv[@]} -eq 1 ]]; then
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
+        else
+          # Replace "dev+prod" to "{dev,prod}"
+          strEnv="{${ENV_NAME/+/,}}"
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
         fi
 
-        mkdir -p "${REPO_PATH}"
-        cp -rTv template/ecr/ "${REPO_PATH}"
-        sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
-        sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
-        grep ecr_repo_name "${REPO_PATH}/settings.tfvars"
+        # set output
+        echo "::set-output name=REPO_PATH::$REPO_PATH"
 
+      # Mode details: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
     - name: Generate token
       uses: tibdex/github-app-token@v1
       id: generate-token
@@ -73,6 +99,8 @@ jobs:
 
     - name: Create PR
       uses: peter-evans/create-pull-request@v4
+      env:
+        REPO_PATH: ${{ steps.templating.outputs.REPO_PATH }}
       with:
         token: ${{ steps.generate-token.outputs.token }}
         # token: ${{ secrets.API_TOKEN_GITHUB }}
@@ -88,5 +116,6 @@ jobs:
         labels: |
           ECR
           AWS
-          Automated PR
+          bot
           ${{ env.ENV_NAME }}
+          ${{ github.workflow }}
