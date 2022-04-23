@@ -19,3 +19,5 @@ jobs:
     - run: |
         pwd
         tree
+        cat README.md
+        date >> report.txt
