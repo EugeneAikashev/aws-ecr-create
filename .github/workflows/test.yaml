@@ -100,3 +100,7 @@ jobs:
         echo '::warning:: This will NOT be rendered as a warning, because stop-commands has been invoked.'
         echo "::$stopMarker::"
         echo '::warning:: This is a warning again, because stop-commands has been turned off.'
+
+        echo "::debug::Set the Octocat variable"
+
+        echo "::error::Missing semicolon"
