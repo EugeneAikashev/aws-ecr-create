@@ -1,0 +1,21 @@
+name: test
+on:
+  workflow_dispatch:
+jobs:
+  create-ecr:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        repository: EugeneAikashev/aws-ecr-infra
+
+    - run: |
+        pwd
+        tree
