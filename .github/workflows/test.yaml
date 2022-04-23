@@ -9,7 +9,15 @@ jobs:
       run:
         shell: bash
 
+    env:
+      INFRA_REPO: "EugeneAikashev/aws-ecr-infra"
+
     steps:
+
+    - name: Checkout Infra
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ env.INFRA_REPO }}
 
     - name: Generate token
       uses: tibdex/github-app-token@v1
@@ -18,22 +26,15 @@ jobs:
         app_id: ${{ secrets.EUGENEAPP_APP_ID }}
         private_key: ${{ secrets.EUGENEAPP_APP_PRIVATE_KEY }}
 
-    - name: Use token
-      env:
-        TOKEN: ${{ steps.generate_token.outputs.token }}
-        VAR1: "variable 1"
-      run: |
-        echo "The generated token is masked: ${TOKEN}"
-        echo "${VAR1}"
-
-    - name: step2
-      run: echo "${VAR1}"
+    # - name: Use token
+    #   env:
+    #     TOKEN: ${{ steps.generate_token.outputs.token }}
+    #     VAR1: "variable 1"
+    #   run: |
+    #     echo "The generated token is masked: ${TOKEN}"
+    #     echo "${VAR1}"
 
 
-    # - name: Checkout Infra
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: EugeneAikashev/aws-ecr-infra
 
     # - run: |
     #     pwd
@@ -41,7 +42,7 @@ jobs:
     #     cat README.md
     #     date >> report.txt
 
-    # - name: Create PR to Infra
+    # - name: Create PR
     #   uses: peter-evans/create-pull-request@v4
     #   with:
     #     token: ${{ secrets.API_TOKEN_GITHUB }}
