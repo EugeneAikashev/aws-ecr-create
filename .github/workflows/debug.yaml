@@ -4,6 +4,7 @@ on:
 
 jobs:
   test:
+    name: test-debug
     runs-on: ubuntu-latest
 
     defaults:
