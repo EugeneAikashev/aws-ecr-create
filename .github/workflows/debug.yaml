@@ -6,7 +6,7 @@ env:
 
 jobs:
   test:
-    name: test-debug ${{ env.myenv }}
+    name: test-debug
     runs-on: ubuntu-latest
 
     defaults:
