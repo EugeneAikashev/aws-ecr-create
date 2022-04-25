@@ -70,7 +70,7 @@ jobs:
         set -euo pipefail
 
         # loop over $ENV_NAME: "dev", "prod" or "dev+prod"
-        for curEnv in ${ENV_NAME//+ }; do
+        for curEnv in ${ENV_NAME//+/ }; do
           echo "Current env is: $curEnv"
 
           REGION_PATH=${REGION_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
