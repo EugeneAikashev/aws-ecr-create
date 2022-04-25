@@ -85,45 +85,45 @@ jobs:
 
         done
 
-    # - name: Templating
-    #   id: templating
-    #   env:
-    #     REPO_PATH_TEMPLATE: "infra/PLACEHOLDER_ENV/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
-    #   run: |
-    #     set -euo pipefail
+    - name: Templating
+      id: templating
+      env:
+        REPO_PATH_TEMPLATE: "common-infra-PLACEHOLDER_ENV/${{ env.REGION }}/02-base-infra/ecr/${{ env.PRODUCT }}/${{ env.SERVICE }}"
+      run: |
+        set -euo pipefail
 
-    #     # Split ENV_NAME to array. Delimeter is "+"
-    #     arrEnv=(${ENV_NAME//+/ })
+        # Split ENV_NAME to array. Delimeter is "+"
+        arrEnv=(${ENV_NAME//+/ })
 
-    #     for curEnv in "${arrEnv[@]}"; do
-    #       echo "Current env is: $curEnv"
+        for curEnv in "${arrEnv[@]}"; do
+          echo "Current env is: $curEnv"
 
-    #       REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
-    #       echo "Current path is: ${REPO_PATH}"
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
+          echo "Current path is: ${REPO_PATH}"
 
-    #       if [[ -d "${REPO_PATH}" ]]; then
-    #         echo "::error::${REPO_PATH} is already exist!"
-    #         exit 1
-    #       fi
+          if [[ -d "${REPO_PATH}" ]]; then
+            echo "::error::${REPO_PATH} is already exist!"
+            exit 1
+          fi
 
-    #       mkdir -p "${REPO_PATH}"
-    #       cp -rTv template/ecr/ "${REPO_PATH}"
-    #       sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
-    #       sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
+          mkdir -p "${REPO_PATH}"
+          cp -rTv template/ecr/ "${REPO_PATH}"
+          sed -i "s/PLACEHOLDER_PRODUCT/${PRODUCT}/g" "${REPO_PATH}/settings.tfvars"
+          sed -i "s/PLACEHOLDER_SERVICE/${SERVICE}/g" "${REPO_PATH}/settings.tfvars"
 
-    #     done
+        done
 
-    #     # Set REPO_PATH for the next steps
-    #     if [[ ${#arrEnv[@]} -eq 1 ]]; then
-    #       REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
-    #     else
-    #       # Replace "dev+prod" to "{dev,prod}"
-    #       strEnv="{${ENV_NAME/+/,}}"
-    #       REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
-    #     fi
+        # Set REPO_PATH for the next steps
+        if [[ ${#arrEnv[@]} -eq 1 ]]; then
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$ENV_NAME}
+        else
+          # Replace "dev+prod" to "{dev,prod}"
+          strEnv="{${ENV_NAME/+/,}}"
+          REPO_PATH=${REPO_PATH_TEMPLATE/PLACEHOLDER_ENV/$strEnv}
+        fi
 
-    #     # set output
-    #     echo "::set-output name=REPO_PATH::$REPO_PATH"
+        # set output
+        echo "::set-output name=REPO_PATH::$REPO_PATH"
 
     #   # Mode details: https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#authenticating-with-github-app-generated-tokens
     # - name: Generate token
