@@ -1,10 +1,12 @@
 name: debug
 on:
   workflow_dispatch:
+env:
+  myenv: "val1"
 
 jobs:
   test:
-    name: test-debug
+    name: test-debug ${{ env.myenv }}
     runs-on: ubuntu-latest
 
     defaults:
