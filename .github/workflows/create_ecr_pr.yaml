@@ -10,8 +10,6 @@ on:
         required: true
         options:
         - airslate
-        - pdffiller
-        - signnow
       serviceName:
         description: 'Service name'
         required: true
@@ -85,6 +83,19 @@ jobs:
 
         done
 
+    - name: Check settings
+      env:
+        SETTINGS: "templates/ecr/settings_${{ env.PRODUCT}}_${{ env.ENV_NAME}}.tfvars"
+      run: |
+        set -euo pipefail
+
+        if [[ -f "${SETTINGS}" ]]; then
+          echo "::error::${SETTINGS} does not exist!"
+          exit 1
+        else
+          echo "Settings is ok!"
+        fi
+
     - name: Templating
       id: templating
       env:
@@ -108,8 +119,8 @@ jobs:
 
           mkdir -p "${REPO_PATH}"
           cp -rTv templates/ecr/ "${REPO_PATH}"
-          mv "${REPO_PATH}/settings_$curEnv.tfvars"  "${REPO_PATH}/settings.tfvars"
-          rm ${REPO_PATH}/settings_*.tfvars
+          mv "${REPO_PATH}/settings_$PRODUCT_$curEnv.tfvars"  "${REPO_PATH}/settings.tfvars"
+          rm "${REPO_PATH}"/settings_*
 
           sed -i "s|PLACEHOLDER_PRODUCT|${PRODUCT}|g" "${REPO_PATH}/settings.tfvars"
           sed -i "s|PLACEHOLDER_SERVICE|${SERVICE}|g" "${REPO_PATH}/settings.tfvars"
