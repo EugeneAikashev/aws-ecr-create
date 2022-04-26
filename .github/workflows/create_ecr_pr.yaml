@@ -89,12 +89,18 @@ jobs:
       run: |
         set -euo pipefail
 
-        if [[ -f "${SETTINGS}" ]]; then
-          echo "Settings is ok!"
-        else
-          echo "::error::${SETTINGS} does not exist!"
-          exit 1
-        fi
+        # loop over $ENV_NAME: "dev", "prod" or "dev+prod"
+        for curEnv in ${ENV_NAME//+/ }; do
+          echo "Current env is: $curEnv"
+
+          if [[ -f "${SETTINGS}" ]]; then
+            echo "Settings is ok!"
+          else
+            echo "::error::${SETTINGS} does not exist!"
+            exit 1
+          fi
+
+        done
 
     - name: Templating
       id: templating
