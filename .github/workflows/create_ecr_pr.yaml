@@ -124,7 +124,7 @@ jobs:
 
           mkdir -p "${REPO_PATH}"
           cp -rTv templates/ecr/ "${REPO_PATH}"
-          mv "${REPO_PATH}/settings_$PRODUCT_$curEnv.tfvars"  "${REPO_PATH}/settings.tfvars"
+          mv "${REPO_PATH}/settings_${PRODUCT}_$curEnv.tfvars"  "${REPO_PATH}/settings.tfvars"
           rm "${REPO_PATH}"/settings_*
 
           sed -i "s|PLACEHOLDER_PRODUCT|${PRODUCT}|g" "${REPO_PATH}/settings.tfvars"
