@@ -84,8 +84,6 @@ jobs:
         done
 
     - name: Check settings
-      env:
-        SETTINGS: "templates/ecr/settings_${{ env.PRODUCT}}_${{ env.ENV_NAME}}.tfvars"
       run: |
         set -euo pipefail
 
@@ -93,6 +91,7 @@ jobs:
         for curEnv in ${ENV_NAME//+/ }; do
           echo "Current env is: $curEnv"
 
+          SETTINGS="templates/ecr/settings_${{ env.PRODUCT}}_$curEnv.tfvars"
           if [[ -f "${SETTINGS}" ]]; then
             echo "Settings is ok!"
           else
