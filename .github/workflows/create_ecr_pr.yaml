@@ -74,11 +74,11 @@ jobs:
           REGION_PATH=${REGION_PATH_TEMPLATE/PLACEHOLDER_ENV/$curEnv}
           echo "Current region path is: ${REGION_PATH}"
 
-          if ! [[ -d "${REGION_PATH}" ]]; then
+          if [[ -d "${REGION_PATH}" ]]; then
+            echo "Region path is ok!"
+          else
             echo "::error::${REGION_PATH} does not exist!"
             exit 1
-          else
-            echo "Region path is ok!"
           fi
 
         done
@@ -90,10 +90,10 @@ jobs:
         set -euo pipefail
 
         if [[ -f "${SETTINGS}" ]]; then
+          echo "Settings is ok!"
+        else
           echo "::error::${SETTINGS} does not exist!"
           exit 1
-        else
-          echo "Settings is ok!"
         fi
 
     - name: Templating
