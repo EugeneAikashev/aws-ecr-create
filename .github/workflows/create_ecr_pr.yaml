@@ -109,13 +109,12 @@ jobs:
           mkdir -p "${REPO_PATH}"
           cp -rTv templates/ecr/ "${REPO_PATH}"
           mv "${REPO_PATH}/settings_$curEnv.tfvars"  "${REPO_PATH}/settings.tfvars"
-          ls -all "${REPO_PATH}/"
           rm ${REPO_PATH}/settings_*.tfvars
 
           sed -i "s|PLACEHOLDER_PRODUCT|${PRODUCT}|g" "${REPO_PATH}/settings.tfvars"
           sed -i "s|PLACEHOLDER_SERVICE|${SERVICE}|g" "${REPO_PATH}/settings.tfvars"
           sed -i "s|PLACEHOLDER_MAINTAINER|${{ github.actor }}|g" "${REPO_PATH}/settings.tfvars"
-          sed -i "s|PLACEHOLDER_RFC|Automated by [${{ github.workflow }}:${{ github.run_number}}] from ${{ github.repository }}|g" "${REPO_PATH}/settings.tfvars"
+          sed -i "s|PLACEHOLDER_RFC|Automated by [${{ github.workflow }}]:${{ github.run_number}} from ${{ github.repository }}|g" "${REPO_PATH}/settings.tfvars"
 
         done
 
